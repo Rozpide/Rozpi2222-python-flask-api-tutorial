@@ -10,17 +10,23 @@ todos = [
 ]
 
 @app.route('/todos', methods=['GET'])
-def hello_world():
+def get_todos():
     json_text = jsonify(todos)
     return json_text
+
 
 @app.route('/todos', methods=['POST'])
 def add_new_todo():
     request_body = request.json
     print("Incoming request with the following body", request_body)
-    return 'Response for the POST todo'
-
-
+    todos.append(request_body)  # Agrega la nueva tarea a la lista todos
+    return jsonify(todos)  # Devuelve la lista actualizada al front end
+    
+@app.route('/todos/<int:position>', methods=['DELETE'])
+def delete_todo(position):
+     if 0 <= position < len(todos):
+        todos.pop(position)  # Elimina la tarea de la lista según la posición
+     return jsonify(todos)  # Devuelve la lista actualizada al front end
 
 
 
